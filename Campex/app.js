@@ -85,6 +85,13 @@ app.put("/campgrounds/:id", async (req, res) => {
   res.redirect(`/campgrounds/${updatedCampground._id}`);
 });
 
+// 16. delete req
+app.delete("/campgrounds/:id", async (req, res) => {
+  const { id } = req.params;
+  await campground.findByIdAndDelete(id);
+  res.redirect("/campgrounds");
+});
+
 // 1. basic boiler plate of express app
 app.listen(3000, () => {
   console.log("SERVING ON PORT 3000");
