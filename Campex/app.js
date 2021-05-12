@@ -28,12 +28,12 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
-// 4. testing & hard coding
-app.get("/makeCampground", async (req, res) => {
-  const camp = new campground({ title: "My Backyard", description: "Cheap camping" });
-  await camp.save();
-  res.send(camp);
-});
+// // 4. testing & hard coding
+// app.get("/makeCampground", async (req, res) => {
+//   const camp = new campground({ title: "My Backyard", description: "Cheap camping" });
+//   await camp.save();
+//   res.send(camp);
+// });
 
 // 1. basic boiler plate of express app
 app.listen(3000, () => {
