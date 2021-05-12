@@ -1,0 +1,25 @@
+{
+  "name": "fullstackWebProjects",
+  "version": "1.0.0",
+  "description": "This repo contains my fullstack web projects. List of projects in this repo:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vk415072/fullstackWebProjects.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vk415072/fullstackWebProjects/issues"
+  },
+  "homepage": "https://github.com/vk415072/fullstackWebProjects#readme",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "mongoose": "^5.12.8"
+  }
+}
