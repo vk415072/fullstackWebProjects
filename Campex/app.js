@@ -35,10 +35,16 @@ app.get("/", (req, res) => {
 //   res.send(camp);
 // });
 
-// 6.
+// 6. campgrounds page
 app.get("/campgrounds", async (req, res) => {
-    const campgrounds = await campground.find({})
-    res.render('campgrounds/index', {campgrounds})
+  const campgrounds = await campground.find({});
+  res.render("campgrounds/index", { campgrounds });
+});
+
+// 7. individual campgrounds show page
+app.get("/campgrounds/:id", async (req, res) => {
+  const campground1 = await campground.findById(req.params.id);
+  res.render("campgrounds/show", { campground1 });
 });
 
 // 1. basic boiler plate of express app
