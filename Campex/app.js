@@ -4,6 +4,8 @@ const path = require("path");
 const mongoose = require("mongoose");
 // 5. requiring our model
 const campground = require("./models/Campground");
+// 12. requiring method-override
+const methodOverride = require("method-override");
 
 // 3. mongoose defaults
 mongoose.connect("mongodb://localhost:27017/campex", {
@@ -25,6 +27,8 @@ app.set("views", path.join(__dirname, "views"));
 
 // 10. to parse req.body in app.post, we need to fake it
 app.use(express.urlencoded({ extended: true }));
+// 13. using method-override
+app.use(methodOverride("_method"));
 
 // 2. listening to homepage req and rendering it.
 app.get("/", (req, res) => {
@@ -52,7 +56,7 @@ app.get("/campgrounds/new", async (req, res) => {
 
 // 9. receiving new campground data and adding to db
 app.post("/campgrounds", async (req, res) => {
-//   console.log(req.body.campground);
+  //   console.log(req.body.campground);
   const newCampground = new campground(req.body.campground);
   await newCampground.save();
   res.redirect(`/campgrounds/${newCampground._id}`);
@@ -62,6 +66,23 @@ app.post("/campgrounds", async (req, res) => {
 app.get("/campgrounds/:id", async (req, res) => {
   const campground1 = await campground.findById(req.params.id);
   res.render("campgrounds/show", { campground1 });
+});
+
+// 11. edit route for campgrounds
+app.get("/campgrounds/:id/edit", async (req, res) => {
+  const campground1 = await campground.findById(req.params.id);
+  res.render("campgrounds/edit", { campground1 });
+});
+
+// 14. app.put after method-override to update the db
+app.put("/campgrounds/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  // 15. (...) 3 dots are for spreading the data
+  const updatedCampground = await campground.findByIdAndUpdate(id, {
+    ...req.body.campground,
+  });
+  res.redirect(`/campgrounds/${updatedCampground._id}`);
 });
 
 // 1. basic boiler plate of express app
