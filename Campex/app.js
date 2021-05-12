@@ -35,6 +35,12 @@ app.get("/", (req, res) => {
 //   res.send(camp);
 // });
 
+// 6.
+app.get("/campgrounds", async (req, res) => {
+    const campgrounds = await campground.find({})
+    res.render('campgrounds/index', {campgrounds})
+});
+
 // 1. basic boiler plate of express app
 app.listen(3000, () => {
   console.log("SERVING ON PORT 3000");

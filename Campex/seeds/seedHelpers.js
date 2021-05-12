@@ -19,7 +19,8 @@ module.exports.descriptors = [
   "Nagar",
   "Desi",
   "Gujjar",
-  "Kalia"
+  "Kalia",
+  "Misty"
 ];
 
 module.exports.places = [
@@ -44,5 +45,6 @@ module.exports.places = [
   "Nala",
   "Greens",
   "Nasha",
-  "Roar"
+  "Roar",
+  "Cliffs"
 ];
