@@ -32,12 +32,18 @@ const seedDB = async () => {
   // 6. random looping through cities.js
   for (let i = 0; i < 50; i++) {
     const random1k = Math.floor(Math.random() * 100);
+    const price = Math.floor(Math.random() * 20) +10
     // console.log(cities);
     // console.log(`HERE HERE HERE ${sample(descriptors)}`);
     const camp = new campground({
       location: `${cities[random1k].city}, ${cities[random1k].state}`,
       // 8. passing random from simple() function to get desc & places
       title: `${sample(descriptors)} ${sample(places)}`,
+      image: "https://source.unsplash.com/collection/483251",
+      description:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis sit ex deleniti commodi minus ipsum. Assumenda molestias a cumque, temporibus tempore ratione facilis repellendus distinctio illo adipisci iste cupiditate blanditiis.",
+        // we can leave "price" like that. No need to do "price: price"
+        price
     });
     await camp.save();
   }
