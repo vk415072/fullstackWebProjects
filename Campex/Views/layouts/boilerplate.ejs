@@ -16,8 +16,10 @@
     />
   </head>
 
-  <body>
-    <!-- including navbar -->
+  <!-- including bootstrap flexbox
+    display flex, make column, body heigh 100 -->
+  <body class="d-flex flex-column vh-100">
+    <!-- including navbar partial -->
     <%- include('../partials/navbar') %>
 
     <!-- body of others -->
@@ -29,5 +31,8 @@
       integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
       crossorigin="anonymous"
     ></script>
+
+    <!-- including footer partial -->
+    <%- include('../partials/footer') %>
   </body>
 </html>
