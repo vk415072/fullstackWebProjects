@@ -1,11 +1,14 @@
 // 1. basic boiler plate of express app
 const express = require("express");
 const path = require("path");
+const app = express();
 const mongoose = require("mongoose");
 // 5. requiring our model
 const campground = require("./models/Campground");
 // 12. requiring method-override
 const methodOverride = require("method-override");
+// 17. requiring ejs-mate
+const ejsMate = require("ejs-mate");
 
 // 3. mongoose defaults
 mongoose.connect("mongodb://localhost:27017/campex", {
@@ -19,8 +22,6 @@ db.once("open", () => {
   console.log("Database connected!");
 });
 
-const app = express();
-
 // 1. basic boiler plate of express app
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -29,6 +30,8 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 // 13. using method-override
 app.use(methodOverride("_method"));
+// 18. using ejs-mate
+app.engine("ejs", ejsMate);
 
 // 2. listening to homepage req and rendering it.
 app.get("/", (req, res) => {
