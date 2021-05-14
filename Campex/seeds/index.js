@@ -32,7 +32,7 @@ const seedDB = async () => {
   // 6. random looping through cities.js
   for (let i = 0; i < 50; i++) {
     const random1k = Math.floor(Math.random() * 100);
-    const price = Math.floor(Math.random() * 20) +10
+    const price = Math.floor(Math.random() * 4000) +10
     // console.log(cities);
     // console.log(`HERE HERE HERE ${sample(descriptors)}`);
     const camp = new campground({
