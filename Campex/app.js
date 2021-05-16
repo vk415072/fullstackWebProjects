@@ -58,11 +58,17 @@ app.get("/campgrounds/new", async (req, res) => {
 });
 
 // 9. receiving new campground data and adding to db
-app.post("/campgrounds", async (req, res) => {
+// 21. adding next to params
+app.post("/campgrounds", async (req, res, next) => {
   //   console.log(req.body.campground);
-  const newCampground = new campground(req.body.campground);
-  await newCampground.save();
-  res.redirect(`/campgrounds/${newCampground._id}`);
+  // 20. wrapping content in try n catch
+  try {
+    const newCampground = new campground(req.body.campground);
+    await newCampground.save();
+    res.redirect(`/campgrounds/${newCampground._id}`);
+  } catch (e) {
+    next(e);
+  }
 });
 
 // 7. individual campgrounds show page
@@ -93,6 +99,11 @@ app.delete("/campgrounds/:id", async (req, res) => {
   const { id } = req.params;
   await campground.findByIdAndDelete(id);
   res.redirect("/campgrounds");
+});
+
+// 19. adding basic default express middleware to handle errors
+app.use((err, req, res, next) => {
+  res.send("Oh boy! Something went wrong!");
 });
 
 // 1. basic boiler plate of express app
