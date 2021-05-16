@@ -9,6 +9,8 @@ const campground = require("./models/Campground");
 const methodOverride = require("method-override");
 // 17. requiring ejs-mate
 const ejsMate = require("ejs-mate");
+// 22. adding our custom catchAsync.js
+const catchAsync = require('./helpers/catchAsync');
 
 // 3. mongoose defaults
 mongoose.connect("mongodb://localhost:27017/campex", {
@@ -46,45 +48,53 @@ app.get("/", (req, res) => {
 // });
 
 // 6. campgrounds page
-app.get("/campgrounds", async (req, res) => {
+// 25. wrapping around catchAsync()
+app.get("/campgrounds", catchAsync(async (req, res) => {
   const campgrounds = await campground.find({});
   res.render("campgrounds/index", { campgrounds });
-});
+}));
 
 // 8. new campground page
-app.get("/campgrounds/new", async (req, res) => {
+// 26. wrapping around catchAsync()
+app.get("/campgrounds/new", catchAsync(async (req, res) => {
   //   const campground1 = await campground.findById(req.params.id);
   res.render("campgrounds/new");
-});
+}));
 
 // 9. receiving new campground data and adding to db
 // 21. adding next to params
-app.post("/campgrounds", async (req, res, next) => {
+// 24. wrapping around catchAsync()
+app.post("/campgrounds", catchAsync(async (req, res, next) => {
   //   console.log(req.body.campground);
   // 20. wrapping content in try n catch
-  try {
+  // 23. no longer need to wrap in try n catch
+  // try {
     const newCampground = new campground(req.body.campground);
     await newCampground.save();
     res.redirect(`/campgrounds/${newCampground._id}`);
-  } catch (e) {
-    next(e);
-  }
-});
+  // } catch (e) {
+    // next() to call our default middleware
+  //   next(e);
+  // }
+}));
 
 // 7. individual campgrounds show page
-app.get("/campgrounds/:id", async (req, res) => {
+// 27. wrapping around catchAsync()
+app.get("/campgrounds/:id", catchAsync(async (req, res) => {
   const campground1 = await campground.findById(req.params.id);
   res.render("campgrounds/show", { campground1 });
-});
+}));
 
 // 11. edit route for campgrounds
-app.get("/campgrounds/:id/edit", async (req, res) => {
+// 28. wrapping around catchAsync()
+app.get("/campgrounds/:id/edit", catchAsync(async (req, res) => {
   const campground1 = await campground.findById(req.params.id);
   res.render("campgrounds/edit", { campground1 });
-});
+}));
 
 // 14. app.put after method-override to update the db
-app.put("/campgrounds/:id", async (req, res) => {
+// 29. wrapping around catchAsync()
+app.put("/campgrounds/:id", catchAsync(async (req, res) => {
   const { id } = req.params;
   console.log(id);
   // 15. (...) 3 dots are for spreading the data
@@ -92,14 +102,15 @@ app.put("/campgrounds/:id", async (req, res) => {
     ...req.body.campground,
   });
   res.redirect(`/campgrounds/${updatedCampground._id}`);
-});
+}));
 
 // 16. delete req
-app.delete("/campgrounds/:id", async (req, res) => {
+// 30. wrapping around catchAsync()
+app.delete("/campgrounds/:id",catchAsync(async (req, res) => {
   const { id } = req.params;
   await campground.findByIdAndDelete(id);
   res.redirect("/campgrounds");
-});
+}));
 
 // 19. adding basic default express middleware to handle errors
 app.use((err, req, res, next) => {
