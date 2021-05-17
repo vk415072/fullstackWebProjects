@@ -13,6 +13,9 @@ const ejsMate = require("ejs-mate");
 const catchAsync = require("./helpers/catchAsync");
 // 32. requiring our custom error class, expressErrors.js
 const ExpressErrors = require("./helpers/expressErrors");
+// 44. requiring JOI package
+const joi = require("joi");
+const Joi = require("joi");
 
 // 3. mongoose defaults
 mongoose.connect("mongodb://localhost:27017/campex", {
@@ -82,7 +85,32 @@ app.post(
       // 23. no longer need to wrap in try n catch
       // try {
       // 36.throwing new ExpressError and our catchAsync will catch that error and hand it over to next(), which makes it way to down to default middleware.
-      if (!req.body.campground) throw new ExpressErrors("Invalid Campground Data", 400);
+      // if (!req.body.campground) throw new ExpressErrors("Invalid Campground Data", 400);
+      // 40. but i've to do many server side validations like that
+      // 41. more eg: if(!req.body.price) do something...
+      // 42. so installing JOI node package that has a schema to handle such validation errors.
+      // 43. our schema for JOI would be "req.body"
+      // 45. defining JOI schema
+      const joiCampgroundSchema = Joi.object({
+         campground: Joi.object({
+            title: Joi.string().required(),
+            price: Joi.number().required().min(0),
+            location: Joi.string().required(),
+            image: Joi.string().required(),
+            description: Joi.string().required(),
+         }).required(),
+      });
+      // 46. passing our data through the JOI schema.
+      // 47. destructuring error from joi error object
+      const { error } = joiCampgroundSchema.validate(req.body);
+      // console.log(result);
+      // 48. throwing error to ExpressError class and passing error details
+      if (error) {
+         // 49. for each element returning message and joining with a comma.
+         const msg = error.details.map((el) => el.message).join(",");
+         throw new ExpressErrors(msg, 400);
+      }
+      // 50.if above condition goes, it would not execute below code as the middleware would execute and it doesn't have a next();
       const newCampground = new campground(req.body.campground);
       await newCampground.save();
       res.redirect(`/campgrounds/${newCampground._id}`);
