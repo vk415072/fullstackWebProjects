@@ -149,8 +149,13 @@ app.use((err, req, res, next) => {
   // res.send("Oh boy! Something went wrong!");
   // 34. destructuring status code and message from err
   // 35. also setting their defaults
-  const { statusCode = 500, message = "Something went wrong" } = err;
-  res.status(statusCode).send(message);
+  // const { statusCode = 500, message = "Something went wrong" } = err;
+  // 38. As i'm passing whole error structure, then default message would not pass as i'm first extracting it nd then setting it's default above.
+  const { statusCode = 500 } = err;
+  // 39. so, i've to update the err structure with a default message
+  if (!err.message) err.message = "Oh No, Something Went Wrong!";
+  // 37. rendering error.ejs view and passing entire err structure
+  res.status(statusCode).render("error.ejs", { err });
 });
 
 // 1. basic boiler plate of express app
