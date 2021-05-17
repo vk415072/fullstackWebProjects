@@ -1,7 +1,7 @@
 // 1. creating class to handel errors
 class ExpressErrors extends Error {
     constructor(message, statusCode) {
-        supper();
+        super();
         this.message = message;
         this.statusCode = statusCode;
     }
