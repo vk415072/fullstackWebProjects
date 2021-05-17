@@ -1,0 +1,16 @@
+// 1. requiring Joi
+const Joi = require("joi");
+
+// 2. copied schema from app.js comment: 57.
+const joiCampgroundSchema = Joi.object({
+   campground: Joi.object({
+      title: Joi.string().required(),
+      price: Joi.number().required().min(0),
+      location: Joi.string().required(),
+      image: Joi.string().required(),
+      description: Joi.string().required(),
+   }).required(),
+});
+
+// 3. exporting...
+module.exports = joiCampgroundSchema;

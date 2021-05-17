@@ -14,8 +14,10 @@ const catchAsync = require("./helpers/catchAsync");
 // 32. requiring our custom error class, expressErrors.js
 const ExpressErrors = require("./helpers/expressErrors");
 // 44. requiring JOI package
-const joi = require("joi");
-const Joi = require("joi");
+// 59. no more need of joi here
+// const joi = require("joi");
+// 58. requiring custom joi schema
+const joiCampgroundSchema = require("./helpers/joiSchema");
 
 // 3. mongoose defaults
 mongoose.connect("mongodb://localhost:27017/campex", {
@@ -39,6 +41,29 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 // 18. using ejs-mate
 app.engine("ejs", ejsMate);
+
+// 52. defining middleware function for joi validation
+const validateCampground = (req, res, next) => {
+   // 53. pasting the joi code from comment: 40-51
+   // 57. moving this joi schema to its own file
+   //  const joiCampgroundSchema = Joi.object({
+   //     campground: Joi.object({
+   //        title: Joi.string().required(),
+   //        price: Joi.number().required().min(0),
+   //        location: Joi.string().required(),
+   //        image: Joi.string().required(),
+   //        description: Joi.string().required(),
+   //     }).required(),
+   //  });
+   const { error } = joiCampgroundSchema.validate(req.body);
+   //  54. we've to call next() here in else
+   if (error) {
+      const msg = error.details.map((el) => el.message).join(",");
+      throw new ExpressErrors(msg, 400);
+   } else {
+      next();
+   }
+};
 
 // 2. listening to homepage req and rendering it.
 app.get("/", (req, res) => {
@@ -77,8 +102,10 @@ app.get(
 // 9. receiving new campground data and adding to db
 // 21. adding next to params
 // 24. wrapping around catchAsync()
+// 55. adding validateCampground middleware to arguments
 app.post(
    "/campgrounds",
+   validateCampground,
    catchAsync(async (req, res, next) => {
       //   console.log(req.body.campground);
       // 20. wrapping content in try n catch
@@ -91,26 +118,27 @@ app.post(
       // 42. so installing JOI node package that has a schema to handle such validation errors.
       // 43. our schema for JOI would be "req.body"
       // 45. defining JOI schema
-      const joiCampgroundSchema = Joi.object({
-         campground: Joi.object({
-            title: Joi.string().required(),
-            price: Joi.number().required().min(0),
-            location: Joi.string().required(),
-            image: Joi.string().required(),
-            description: Joi.string().required(),
-         }).required(),
-      });
-      // 46. passing our data through the JOI schema.
-      // 47. destructuring error from joi error object
-      const { error } = joiCampgroundSchema.validate(req.body);
-      // console.log(result);
-      // 48. throwing error to ExpressError class and passing error details
-      if (error) {
-         // 49. for each element returning message and joining with a comma.
-         const msg = error.details.map((el) => el.message).join(",");
-         throw new ExpressErrors(msg, 400);
-      }
+      // const joiCampgroundSchema = Joi.object({
+      //    campground: Joi.object({
+      //       title: Joi.string().required(),
+      //       price: Joi.number().required().min(0),
+      //       location: Joi.string().required(),
+      //       image: Joi.string().required(),
+      //       description: Joi.string().required(),
+      //    }).required(),
+      // });
+      // // 46. passing our data through the JOI schema.
+      // // 47. destructuring error from joi error object
+      // const { error } = joiCampgroundSchema.validate(req.body);
+      // // console.log(result);
+      // // 48. throwing error to ExpressError class and passing error details
+      // if (error) {
+      //    // 49. for each element returning message and joining with a comma.
+      //    const msg = error.details.map((el) => el.message).join(",");
+      //    throw new ExpressErrors(msg, 400);
+      // }
       // 50.if above condition goes, it would not execute below code as the middleware would execute and it doesn't have a next();
+      // 51. moving this joi thing to a new middleware, to use in all routes.
       const newCampground = new campground(req.body.campground);
       await newCampground.save();
       res.redirect(`/campgrounds/${newCampground._id}`);
@@ -147,8 +175,10 @@ app.get(
 
 // 14. app.put after method-override to update the db
 // 29. wrapping around catchAsync()
+// 56. adding validateCampground middleware to arguments
 app.put(
    "/campgrounds/:id",
+   validateCampground,
    catchAsync(async (req, res) => {
       const { id } = req.params;
       console.log(id);
