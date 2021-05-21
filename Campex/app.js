@@ -18,6 +18,8 @@ const ExpressErrors = require("./helpers/expressErrors");
 // const joi = require("joi");
 // 58. requiring custom joi schema
 const joiCampgroundSchema = require("./helpers/joiSchema");
+// 62. requiring review model
+const Review = require("./models/review");
 
 // 3. mongoose defaults
 mongoose.connect("mongodb://localhost:27017/campex", {
@@ -198,6 +200,24 @@ app.delete(
       const { id } = req.params;
       await campground.findByIdAndDelete(id);
       res.redirect("/campgrounds");
+   })
+);
+
+// 60. adding post route to get campground review
+app.post(
+   "/campgrounds/:id/reviews",
+   catchAsync(async (req, res) => {
+      // 61. finding that campground to associate this review with
+      const campground1 = await campground.findById(req.params.id);
+      // 63. making new review
+      const review = new Review(req.body.review);
+      // 64. pushing review into campground
+      campground1.reviews.push(review);
+
+      // 65. saving both
+      await review.save();
+      await campground1.save();
+      res.redirect(`/campgrounds/${campground1._id}`);
    })
 );
 
