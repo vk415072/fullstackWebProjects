@@ -17,7 +17,8 @@ const ExpressErrors = require("./helpers/expressErrors");
 // 59. no more need of joi here
 // const joi = require("joi");
 // 58. requiring custom joi schema
-const joiCampgroundSchema = require("./helpers/joiSchema");
+// 66. also requiring reviewSchema while destructuring it
+const { joiCampgroundSchema, reviewSchema } = require("./helpers/joiSchema");
 // 62. requiring review model
 const Review = require("./models/review");
 
@@ -59,6 +60,18 @@ const validateCampground = (req, res, next) => {
    //  });
    const { error } = joiCampgroundSchema.validate(req.body);
    //  54. we've to call next() here in else
+   if (error) {
+      const msg = error.details.map((el) => el.message).join(",");
+      throw new ExpressErrors(msg, 400);
+   } else {
+      next();
+   }
+};
+
+// 67. making similar middleware like above for reviews
+const validateReview = (req, res, next) => {
+   // 68. check for an error
+   const { error } = reviewSchema.validate(req.body);
    if (error) {
       const msg = error.details.map((el) => el.message).join(",");
       throw new ExpressErrors(msg, 400);
@@ -204,8 +217,10 @@ app.delete(
 );
 
 // 60. adding post route to get campground review
+// 69. adding validateReview
 app.post(
    "/campgrounds/:id/reviews",
+   validateReview,
    catchAsync(async (req, res) => {
       // 61. finding that campground to associate this review with
       const campground1 = await campground.findById(req.params.id);
