@@ -21,6 +21,7 @@ const ExpressErrors = require("./helpers/expressErrors");
 const { joiCampgroundSchema, reviewSchema } = require("./helpers/joiSchema");
 // 62. requiring review model
 const Review = require("./models/review");
+const Campground = require("./models/Campground");
 
 // 3. mongoose defaults
 mongoose.connect("mongodb://localhost:27017/campex", {
@@ -233,6 +234,19 @@ app.post(
       await review.save();
       await campground1.save();
       res.redirect(`/campgrounds/${campground1._id}`);
+   })
+);
+
+// 71. delete route for reviews
+app.delete(
+   "/campgrounds/:id/reviews/:reviewId",
+   catchAsync(async (req, res) => {
+      const { id, reviewId } = req.params;
+      // 72. deleting only one review from that campground  db
+      await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+      // 73. deleting review from review db
+      await Review.findByIdAndDelete(reviewId);
+      res.redirect(`/campgrounds/${id}`);
    })
 );
 
