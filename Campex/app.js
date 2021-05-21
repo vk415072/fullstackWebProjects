@@ -171,7 +171,7 @@ app.get(
    catchAsync(async (req, res) => {
       // 70. also populating reviews
       const campground1 = await campground.findById(req.params.id).populate("reviews");
-      console.log(campground1);
+      // console.log(campground1);
       res.render("campgrounds/show", { campground1 });
    })
 );
