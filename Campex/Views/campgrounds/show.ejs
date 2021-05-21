@@ -21,7 +21,7 @@
          </div>
          <div class="card-footer text-muted">2 days ago</div>
       </div>
-      <!-- for review -->
+      <!-- add review -->
       <h2>Leave a review:</h2>
       <form class="mb-3 validated-form" action="/campgrounds/<%= campground1._id %>/reviews" method="POST" novalidate>
          <div class="mb-3">
@@ -31,11 +31,16 @@
          <div class="mb-3">
             <label class="form-label" for="reviewBody">Review:</label>
             <textarea class="form-control" name="review[body]" id="reviewBody" cols="30" rows="3" required></textarea>
-            <div class="valid-feedback">
-              Looks good!
-            </div>
+            <div class="valid-feedback">Looks good!</div>
          </div>
          <button class="btn btn-success">Add Review</button>
       </form>
+      <!-- show review -->
+      <% for(let review of campground1.reviews) { %>
+      <div class="mb-3">
+         <p><%= review.rating %></p>
+         <p><%= review.body %></p>
+      </div>
+      <% } %>
    </div>
 </div>

@@ -169,10 +169,10 @@ app.post(
 app.get(
    "/campgrounds/:id",
    catchAsync(async (req, res) => {
-      const campground1 = await campground.findById(req.params.id);
-      res.render("campgrounds/show", {
-         campground1,
-      });
+      // 70. also populating reviews
+      const campground1 = await campground.findById(req.params.id).populate("reviews");
+      console.log(campground1);
+      res.render("campgrounds/show", { campground1 });
    })
 );
 
