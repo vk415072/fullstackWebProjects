@@ -214,6 +214,8 @@ app.delete(
       const { id } = req.params;
       await campground.findByIdAndDelete(id);
       res.redirect("/campgrounds");
+      // 74. here findByIdAndDelete() of mongoose query triggers a middleware i.e, findOneAndDelete()
+      // 75. so i've added that mongoose middleware in campground.js model to delete the reviews of this particular campground.
    })
 );
 
