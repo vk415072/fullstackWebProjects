@@ -2,7 +2,7 @@
 const Joi = require("joi");
 
 // 2. copied schema from app.js comment: 57.
-const joiCampgroundSchema = Joi.object({
+module.exports.joiCampgroundSchema = Joi.object({
    campground: Joi.object({
       title: Joi.string().required(),
       price: Joi.number().required().min(0),
@@ -13,7 +13,7 @@ const joiCampgroundSchema = Joi.object({
 });
 
 // 3. exporting...
-module.exports = joiCampgroundSchema;
+// module.exports = joiCampgroundSchema;
 
 // 4. exporting reviewSchema
 module.exports.reviewSchema = Joi.object({
