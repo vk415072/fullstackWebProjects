@@ -23,12 +23,19 @@ const { joiCampgroundSchema, reviewSchema } = require("./helpers/joiSchema");
 const Review = require("./models/review");
 // 77. requiring campgrounds routes
 const campgrounds = require("./routes/campground");
+// 80. requiring reviews routes
+const reviews = require("./routes/review");
+// 84. requiring express-session
+const session = require("express-session");
+// 88. requiring connect-flash
+const flash = require("connect-flash");
 
 // 3. mongoose defaults
 mongoose.connect("mongodb://localhost:27017/campex", {
    useNewUrlParser: true,
    useCreateIndex: true,
    useUnifiedTopology: true,
+   useFindAndModify: false,
 });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error"));
@@ -46,6 +53,25 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 // 18. using ejs-mate
 app.engine("ejs", ejsMate);
+// 82. telling express to serve over custom static /public directory.
+// 83. so that i can use the files of this directory directly.
+app.use(express.static("public"));
+// 86. creating session configs
+const sessionConfig = {
+   secret: "thisisasecret!",
+   resave: false,
+   saveUninitialized: true,
+   cookie: {
+      httpOnly: true,
+      expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+   },
+};
+// 85. using express-session
+// 87. passing sessionConfig
+app.use(session(sessionConfig));
+// 90. using flash
+app.use(flash());
 
 // 78. moved validateCampground middleware to routes/campground.js
 // // 52. defining middleware function for joi validation
@@ -71,59 +97,40 @@ app.engine("ejs", ejsMate);
 //    }
 // };
 
-// 67. making similar middleware like above for reviews
-const validateReview = (req, res, next) => {
-   // 68. check for an error
-   const { error } = reviewSchema.validate(req.body);
-   if (error) {
-      const msg = error.details.map((el) => el.message).join(",");
-      throw new ExpressErrors(msg, 400);
-   } else {
-      next();
-   }
-};
+// 81. moved to /routes/review.js
+// // 67. making similar middleware like above for reviews
+// const validateReview = (req, res, next) => {
+//    // 68. check for an error
+//    const { error } = reviewSchema.validate(req.body);
+//    if (error) {
+//       const msg = error.details.map((el) => el.message).join(",");
+//       throw new ExpressErrors(msg, 400);
+//    } else {
+//       next();
+//    }
+// };
 
 // 2. listening to homepage req and rendering it.
 app.get("/", (req, res) => {
    res.render("home");
 });
 
+// 91. adding flash middleware
+app.use((req, res, next) => {
+   // 92. on every single req, whatever in the 'success' will have access to it under the locals with a key 'success'
+   res.locals.success = req.flash("success");
+   // 93. also adding for any error
+   res.locals.error = req.flash("error");
+   next();
+});
+
 // 76. moved all /campground routes to routes/campground.js
 // 77. using campgrounds routes
 app.use("/campgrounds", campgrounds);
 
-// 60. adding post route to get campground review
-// 69. adding validateReview
-app.post(
-   "/campgrounds/:id/reviews",
-   validateReview,
-   catchAsync(async (req, res) => {
-      // 61. finding that campground to associate this review with
-      const campground1 = await Campground.findById(req.params.id);
-      // 63. making new review
-      const review = new Review(req.body.review);
-      // 64. pushing review into campground
-      campground1.reviews.push(review);
-
-      // 65. saving both
-      await review.save();
-      await campground1.save();
-      res.redirect(`/campgrounds/${campground1._id}`);
-   })
-);
-
-// 71. delete route for reviews
-app.delete(
-   "/campgrounds/:id/reviews/:reviewId",
-   catchAsync(async (req, res) => {
-      const { id, reviewId } = req.params;
-      // 72. deleting only one review from that campground  db
-      await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-      // 73. deleting review from review db
-      await Review.findByIdAndDelete(reviewId);
-      res.redirect(`/campgrounds/${id}`);
-   })
-);
+// 78. moved all /reviews routes to routes/review.js
+// 79. using reviews routes
+app.use("/campgrounds/:id/reviews", reviews);
 
 // 31. adding a middleware which handle all routes excepts those are matched above.
 app.all("*", (req, res, next) => {

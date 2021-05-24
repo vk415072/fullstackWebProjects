@@ -22,8 +22,12 @@
       <!-- including navbar partial -->
       <%- include('../partials/navbar') %>
 
-      <!-- body of others -->
-      <main class="container mt-5"><%- body %></main>
+      <main class="container mt-5">
+         <!-- added flash.js -->
+         <%- include('../partials/flash') %>
+         <!-- body of others -->
+         <%- body %>
+      </main>
 
       <!-- bootstrap js -->
       <script

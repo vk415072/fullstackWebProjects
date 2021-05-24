@@ -90,6 +90,8 @@ router.post(
       // 51. moving this joi thing to a new middleware, to use in all routes.
       const newCampground = new Campground(req.body.campground);
       await newCampground.save();
+      // 80. adding flash message after creating a campground
+      req.flash("success", "Successfully added a new Campground");
       res.redirect(`/campgrounds/${newCampground._id}`);
       // } catch (e) {
       // next() to call our default middleware
@@ -105,7 +107,14 @@ router.get(
    catchAsync(async (req, res) => {
       // 70. also populating reviews
       const campground1 = await Campground.findById(req.params.id).populate("reviews");
+      // 84. flashing error if no campground.
+      if (!campground1) {
+         req.flash("error", "Campground not found");
+         return res.redirect("/campgrounds");
+      }
       // console.log(campground1);
+      // 81. now also we can pass the flash message like "msg: req.flash("success")"
+      // 82. but i'll make a middleware in app.js for that.
       res.render("campgrounds/show", { campground1 });
    })
 );
@@ -135,6 +144,8 @@ router.put(
       const updatedCampground = await Campground.findByIdAndUpdate(id, {
          ...req.body.campground,
       });
+      // 83. adding flash message for update too
+      req.flash("success", "Successfully updated campground");
       res.redirect(`/campgrounds/${updatedCampground._id}`);
    })
 );
