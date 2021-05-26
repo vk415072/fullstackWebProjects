@@ -5,6 +5,8 @@ const catchAsync = require("../helpers/catchAsync");
 const ExpressErrors = require("../helpers/expressErrors");
 const Campground = require("../models/Campground");
 const { joiCampgroundSchema, reviewSchema } = require("../helpers/joiSchema");
+// 87. importing user middleware which check if logged in
+const { isLoggedIn } = require("../helpers/userMiddleware");
 
 // 79. moved from app.js
 const validateCampground = (req, res, next) => {
@@ -40,10 +42,18 @@ router.get(
 
 // 8. new campground page
 // 26. wrapping around catchAsync()
+// 88. using user imported middleware
 router.get(
    "/new",
+   isLoggedIn,
    catchAsync(async (req, res) => {
       //   const campground1 = await campground.findById(req.params.id);
+      // 86. moving this verification to separate file as a middleware
+      // // 85. checking if user is logged in
+      // if (!req.isAuthenticated()) {
+      //    req.flash("error", "you must be signed in");
+      //    return res.redirect("/login");
+      // }
       res.render("campgrounds/new");
    })
 );
@@ -52,9 +62,11 @@ router.get(
 // 21. adding next to params
 // 24. wrapping around catchAsync()
 // 55. adding validateCampground middleware to arguments
+// 89. as we've form validation via bootstrap but still using userMiddleware here also.
 router.post(
    "/",
    validateCampground,
+   isLoggedIn,
    catchAsync(async (req, res, next) => {
       //   console.log(req.body.campground);
       // 20. wrapping content in try n catch
@@ -123,6 +135,7 @@ router.get(
 // 28. wrapping around catchAsync()
 router.get(
    "/:id/edit",
+   isLoggedIn,
    catchAsync(async (req, res) => {
       const campground1 = await Campground.findById(req.params.id);
       res.render("campgrounds/edit", {
@@ -136,6 +149,7 @@ router.get(
 // 56. adding validateCampground middleware to arguments
 router.put(
    "/:id",
+   isLoggedIn,
    validateCampground,
    catchAsync(async (req, res) => {
       const { id } = req.params;
@@ -154,6 +168,7 @@ router.put(
 // 30. wrapping around catchAsync()
 router.delete(
    "/:id",
+   isLoggedIn,
    catchAsync(async (req, res) => {
       const { id } = req.params;
       await Campground.findByIdAndDelete(id);
