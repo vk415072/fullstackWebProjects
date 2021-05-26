@@ -142,12 +142,14 @@ app.get("/", (req, res) => {
    res.render("home");
 });
 
-// 91. adding flash middleware
+// 91. adding flash middleware (all these locals can be access in all routes)
 app.use((req, res, next) => {
-   // 92. on every single req, whatever in the 'success' will have access to it under the locals with a key 'success'
+   // 92. on every single req, whatever in the 'success' will have access to it under the locals (tamplets) with a key 'success'
    res.locals.success = req.flash("success");
    // 93. also adding for any error
    res.locals.error = req.flash("error");
+   // 105. defining currentUser's local
+   res.locals.currentUser = req.user;
    next();
 });
 
