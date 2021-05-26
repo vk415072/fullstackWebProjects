@@ -39,7 +39,12 @@ router.get("/login", (req, res) => {
 // using passport default middleware here with local strategy and some more features
 router.post("/login", passport.authenticate("local", { failureFlash: true, failureRedirect: "/login" }), (req, res) => {
    req.flash("success", "Welcome back!");
-   res.redirect("/campgrounds");
+   // using returning to requested URL asked before login/register (defined in userMiddleware.js)
+   // or '/campgrounds' because what is user didn't asked for any URL before login/register
+   const requestedUrl = req.session.returnTo || "/campgrounds";
+   // also we need to delete that requested URl that is saved in the db
+   delete req.session.returnTo;
+   res.redirect(requestedUrl);
 });
 
 router.get("/logout", (req, res) => {
