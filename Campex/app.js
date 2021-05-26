@@ -22,13 +22,22 @@ const { joiCampgroundSchema, reviewSchema } = require("./helpers/joiSchema");
 // 62. requiring review model
 const Review = require("./models/review");
 // 77. requiring campgrounds routes
-const campgrounds = require("./routes/campground");
+
+const campgroundRoutes = require("./routes/campground");
 // 80. requiring reviews routes
-const reviews = require("./routes/review");
+const reviewRoutes = require("./routes/review");
+// 103. requiring users routes
+const userRoutes = require("./routes/users");
+
 // 84. requiring express-session
 const session = require("express-session");
 // 88. requiring connect-flash
 const flash = require("connect-flash");
+// 94. requiring passport
+const passport = require("passport");
+const passportLocal = require("passport-local");
+// 96. requiring our user model
+const User = require("./models/user");
 
 // 3. mongoose defaults
 mongoose.connect("mongodb://localhost:27017/campex", {
@@ -72,6 +81,24 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 // 90. using flash
 app.use(flash());
+// 95. using passport
+app.use(passport.initialize());
+app.use(passport.session());
+// 97. telling passport to use local strategy (passport-local) and for that local strategy, the authentication method is located on our User model and its called authenticate()
+passport.use(new passportLocal(User.authenticate()));
+// 98. telling passport to serialize (how to store User in the session) the user
+passport.serializeUser(User.serializeUser());
+// 99. telling to deserialize (how to get User out of the session) the user
+passport.deserializeUser(User.deserializeUser());
+
+// // 100. testing passport implementation in pur user schema
+// app.get("/fakeuser", async (req, res) => {
+//    const user = new User({ email: "vk415072@gmail.com", username: "vivek" });
+//    // 101. passing user and password to User.register
+//    // 102. here the passport will hash the password using "pbkdf2" hashing tech (not the bcrypt tech)
+//    const registeredUser = await User.register(user, "12345");
+//    res.send(registeredUser);
+// });
 
 // 78. moved validateCampground middleware to routes/campground.js
 // // 52. defining middleware function for joi validation
@@ -126,11 +153,12 @@ app.use((req, res, next) => {
 
 // 76. moved all /campground routes to routes/campground.js
 // 77. using campgrounds routes
-app.use("/campgrounds", campgrounds);
-
+app.use("/campgrounds", campgroundRoutes);
 // 78. moved all /reviews routes to routes/review.js
 // 79. using reviews routes
-app.use("/campgrounds/:id/reviews", reviews);
+app.use("/campgrounds/:id/reviews", reviewRoutes);
+// 104. using users routes
+app.use("/", userRoutes);
 
 // 31. adding a middleware which handle all routes excepts those are matched above.
 app.all("*", (req, res, next) => {
