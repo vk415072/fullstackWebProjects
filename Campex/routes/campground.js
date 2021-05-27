@@ -11,6 +11,22 @@ const { isLoggedIn, isCampgroundAuthor, validateCampground } = require("../helpe
 // 102. including controllers of our routes
 const campgroundController = require("../controllers/campground");
 
+// 104. chaining all routes using router.route in here and commenting whole code
+router
+   .route("/")
+   .get(catchAsync(campgroundController.indexPage))
+   .post(validateCampground, isLoggedIn, catchAsync(campgroundController.createCampground));
+
+router.get("/new", isLoggedIn, catchAsync(campgroundController.newPage));
+
+router
+   .route("/:id")
+   .get(catchAsync(campgroundController.showCampground))
+   .put(isLoggedIn, isCampgroundAuthor, validateCampground, catchAsync(campgroundController.updateCampground))
+   .delete(isLoggedIn, isCampgroundAuthor, catchAsync(campgroundController.deleteCampground));
+
+router.get("/:id/edit", isLoggedIn, isCampgroundAuthor, catchAsync(campgroundController.editPage));
+
 // 96. both middleware moved to userMiddleware.js
 // // 79. moved from app.js
 // const validateCampground = (req, res, next) => {
@@ -56,7 +72,7 @@ const campgroundController = require("../controllers/campground");
 // );
 // 101. only using this routes frame (excluding async function and  whole content in it)
 // 103. now using the campground controller. (also doing this with all other routes)
-router.get("/", catchAsync(campgroundController.indexPage));
+// router.get("/", catchAsync(campgroundController.indexPage));
 
 // 8. new campground page
 // 26. wrapping around catchAsync()
@@ -75,7 +91,7 @@ router.get("/", catchAsync(campgroundController.indexPage));
 //       res.render("campgrounds/new");
 //    })
 // );
-router.get("/new", isLoggedIn, catchAsync(campgroundController.newPage));
+// router.get("/new", isLoggedIn, catchAsync(campgroundController.newPage));
 
 // // 9. receiving new campground data and adding to db
 // // 21. adding next to params
@@ -132,7 +148,7 @@ router.get("/new", isLoggedIn, catchAsync(campgroundController.newPage));
 //       // }
 //    })
 // );
-router.post("/", validateCampground, isLoggedIn, catchAsync(campgroundController.createCampground));
+// router.post("/", validateCampground, isLoggedIn, catchAsync(campgroundController.createCampground));
 
 // // 7. individual campgrounds show page
 // // 27. wrapping around catchAsync()
@@ -158,12 +174,12 @@ router.post("/", validateCampground, isLoggedIn, catchAsync(campgroundController
 // );
 // 7. individual campgrounds show page
 // 27. wrapping around catchAsync()
-router.get("/:id", catchAsync(campgroundController.showCampground));
+// router.get("/:id", catchAsync(campgroundController.showCampground));
 
 // // 11. edit route for campgrounds
 // // 28. wrapping around catchAsync()
 // // 95. adding isCampgroundAuthor check middleware
-router.get("/:id/edit", isLoggedIn, isCampgroundAuthor, catchAsync(campgroundController.editPage));
+// router.get("/:id/edit", isLoggedIn, isCampgroundAuthor, catchAsync(campgroundController.editPage));
 
 // // 14. app.put after method-override to update the db
 // // 29. wrapping around catchAsync()
@@ -192,7 +208,7 @@ router.get("/:id/edit", isLoggedIn, isCampgroundAuthor, catchAsync(campgroundCon
 //       res.redirect(`/campgrounds/${updatedCampground._id}`);
 //    })
 // );
-router.put("/:id", isLoggedIn, isCampgroundAuthor, validateCampground, catchAsync(campgroundController.updateCampground));
+// router.put("/:id", isLoggedIn, isCampgroundAuthor, validateCampground, catchAsync(campgroundController.updateCampground));
 
 // // 16. delete req
 // // 30. wrapping around catchAsync()
@@ -210,12 +226,7 @@ router.put("/:id", isLoggedIn, isCampgroundAuthor, validateCampground, catchAsyn
 // );
 // 16. delete req
 // 30. wrapping around catchAsync()
-router.delete(
-   "/:id",
-   isLoggedIn,
-   isCampgroundAuthor,
-   catchAsync(campgroundController.deleteCampground)
-);
+// router.delete("/:id", isLoggedIn, isCampgroundAuthor, catchAsync(campgroundController.deleteCampground));
 
 // 76. exporting
 module.exports = router;
