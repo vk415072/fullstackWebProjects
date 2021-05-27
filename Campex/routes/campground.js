@@ -156,11 +156,17 @@ router.put(
    validateCampground,
    catchAsync(async (req, res) => {
       const { id } = req.params;
-      console.log(id);
+      // 92. breaking the code of // 15. to apply some conditions
+      const updatedCampground = await Campground.findById(id);
+      if (!updatedCampground.author.equals(req.user._id)) {
+         req.flash("error", "You do not have permission to do that!");
+         return res.redirect(`/campgrounds/${id}`);
+      }
       // 15. (...) 3 dots are for spreading the data
-      const updatedCampground = await Campground.findByIdAndUpdate(id, {
+      await Campground.findByIdAndUpdate(id, {
          ...req.body.campground,
       });
+
       // 83. adding flash message for update too
       req.flash("success", "Successfully updated campground");
       res.redirect(`/campgrounds/${updatedCampground._id}`);
