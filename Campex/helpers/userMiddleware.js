@@ -1,6 +1,7 @@
 const { joiCampgroundSchema, reviewSchema } = require("./joiSchema");
 const ExpressErrors = require("./expressErrors");
 const Campground = require("../models/Campground");
+const Review = require("../models/review");
 
 module.exports.isLoggedIn = (req, res, next) => {
    if (!req.isAuthenticated()) {
@@ -23,7 +24,7 @@ module.exports.validateCampground = (req, res, next) => {
    }
 };
 
-module.exports.isAuthor = async (req, res, next) => {
+module.exports.isCampgroundAuthor = async (req, res, next) => {
    const { id } = req.params;
    const updatedCampground = await Campground.findById(id);
    if (!updatedCampground.author.equals(req.user._id)) {
@@ -41,4 +42,14 @@ module.exports.validateReview = (req, res, next) => {
    } else {
       next();
    }
+};
+
+module.exports.isReviewAuthor = async (req, res, next) => {
+   const { id, reviewId } = req.params;
+   const review = await Review.findById(reviewId);
+   if (!review.author.equals(req.user._id)) {
+      req.flash("error", "You do not have permission to do that!");
+      return res.redirect(`/campgrounds/${id}`);
+   }
+   next();
 };

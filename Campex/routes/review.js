@@ -12,8 +12,7 @@ const catchAsync = require("../helpers/catchAsync");
 // const { reviewSchema } = require("../helpers/joiSchema");
 
 // 78. adding userMiddleware logics here
-const { isLoggedIn, isAuthor, validateReview ,validateCampground } = require("../helpers/userMiddleware");
-
+const { isLoggedIn, isCampgroundAuthor, validateReview, validateCampground, isReviewAuthor } = require("../helpers/userMiddleware");
 
 // 77. moving this logic to userMiddleware.js
 // // 67. making similar middleware like above for reviews
@@ -33,6 +32,7 @@ const { isLoggedIn, isAuthor, validateReview ,validateCampground } = require("..
 router.post(
    "/",
    validateReview,
+   isLoggedIn,
    catchAsync(async (req, res) => {
       // 61. finding that campground to associate this review with
       //   73. now req.params will not work here as there is no id in params here
@@ -40,6 +40,8 @@ router.post(
       const campground1 = await Campground.findById(req.params.id);
       // 63. making new review
       const review = new Review(req.body.review);
+      // 81. adding user id into review's author entry
+      review.author = req.user._id;
       // 64. pushing review into campground
       campground1.reviews.push(review);
 
@@ -53,8 +55,11 @@ router.post(
 );
 
 // 71. delete route for reviews
+// 82.
 router.delete(
    "/:reviewId",
+   isLoggedIn,
+   isReviewAuthor,
    catchAsync(async (req, res) => {
       const { id, reviewId } = req.params;
       // 72. deleting only one review from that campground  db
