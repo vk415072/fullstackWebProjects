@@ -101,6 +101,8 @@ router.post(
       // 50.if above condition goes, it would not execute below code as the middleware would execute and it doesn't have a next();
       // 51. moving this joi thing to a new middleware, to use in all routes.
       const newCampground = new Campground(req.body.campground);
+      // 91. adding user id into campground author entry
+      newCampground.author = req.user._id;
       await newCampground.save();
       // 80. adding flash message after creating a campground
       req.flash("success", "Successfully added a new Campground");
@@ -118,7 +120,9 @@ router.get(
    "/:id",
    catchAsync(async (req, res) => {
       // 70. also populating reviews
-      const campground1 = await Campground.findById(req.params.id).populate("reviews");
+      // 90. also populating user (author) data in campground collection
+      const campground1 = await await Campground.findById(req.params.id).populate("reviews").populate("author");
+      console.log(campground1);
       // 84. flashing error if no campground.
       if (!campground1) {
          req.flash("error", "Campground not found");
