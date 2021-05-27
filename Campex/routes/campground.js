@@ -122,7 +122,6 @@ router.get(
       // 70. also populating reviews
       // 90. also populating user (author) data in campground collection
       const campground1 = await await Campground.findById(req.params.id).populate("reviews").populate("author");
-      console.log(campground1);
       // 84. flashing error if no campground.
       if (!campground1) {
          req.flash("error", "Campground not found");
