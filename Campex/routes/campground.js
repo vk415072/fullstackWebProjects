@@ -2,22 +2,34 @@ const express = require("express");
 const router = express.Router();
 // 78. adding some data from app.js
 const catchAsync = require("../helpers/catchAsync");
-const ExpressErrors = require("../helpers/expressErrors");
 const Campground = require("../models/Campground");
-const { joiCampgroundSchema, reviewSchema } = require("../helpers/joiSchema");
+// 98. no more need for this schema in here now but require in userMiddleware.js
+// const { joiCampgroundSchema, reviewSchema } = require("../helpers/joiSchema");
 // 87. importing user middleware which check if logged in
-const { isLoggedIn } = require("../helpers/userMiddleware");
+// 97. also requiring our both moved middleware s.
+const { isLoggedIn, isAuthor, validateCampground } = require("../helpers/userMiddleware");
 
-// 79. moved from app.js
-const validateCampground = (req, res, next) => {
-   const { error } = joiCampgroundSchema.validate(req.body);
-   if (error) {
-      const msg = error.details.map((el) => el.message).join(",");
-      throw new ExpressErrors(msg, 400);
-   } else {
-      next();
-   }
-};
+// 96. both middleware moved to userMiddleware.js
+// // 79. moved from app.js
+// const validateCampground = (req, res, next) => {
+//    const { error } = joiCampgroundSchema.validate(req.body);
+//    if (error) {
+//       const msg = error.details.map((el) => el.message).join(",");
+//       throw new ExpressErrors(msg, 400);
+//    } else {
+//       next();
+//    }
+// };
+// // 94. making middleware to check the authorization
+// const isAuthor = async (req, res, next) => {
+//    const { id } = req.params;
+//    const updatedCampground = await Campground.findById(id);
+//    if (!updatedCampground.author.equals(req.user._id)) {
+//       req.flash("error", "You do not have permission to do that!");
+//       return res.redirect(`/campgrounds/${id}`);
+//    }
+//    next();
+// };
 
 // 77. removing "/campground" as i already add it from app.js
 
@@ -136,9 +148,11 @@ router.get(
 
 // 11. edit route for campgrounds
 // 28. wrapping around catchAsync()
+// 95. adding isAuthor check middleware
 router.get(
    "/:id/edit",
    isLoggedIn,
+   isAuthor,
    catchAsync(async (req, res) => {
       const campground1 = await Campground.findById(req.params.id);
       res.render("campgrounds/edit", {
@@ -153,17 +167,19 @@ router.get(
 router.put(
    "/:id",
    isLoggedIn,
+   isAuthor,
    validateCampground,
    catchAsync(async (req, res) => {
       const { id } = req.params;
       // 92. breaking the code of // 15. to apply some conditions
-      const updatedCampground = await Campground.findById(id);
-      if (!updatedCampground.author.equals(req.user._id)) {
-         req.flash("error", "You do not have permission to do that!");
-         return res.redirect(`/campgrounds/${id}`);
-      }
+      // 93. moving this logic to a middleware above.
+      // const updatedCampground = await Campground.findById(id);
+      // if (!updatedCampground.author.equals(req.user._id)) {
+      //    req.flash("error", "You do not have permission to do that!");
+      //    return res.redirect(`/campgrounds/${id}`);
+      // }
       // 15. (...) 3 dots are for spreading the data
-      await Campground.findByIdAndUpdate(id, {
+      const updatedCampground = await Campground.findByIdAndUpdate(id, {
          ...req.body.campground,
       });
 
@@ -178,6 +194,7 @@ router.put(
 router.delete(
    "/:id",
    isLoggedIn,
+   isAuthor,
    catchAsync(async (req, res) => {
       const { id } = req.params;
       await Campground.findByIdAndDelete(id);

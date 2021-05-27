@@ -6,21 +6,27 @@ const Review = require("../models/review");
 const Campground = require("../models/Campground");
 
 const catchAsync = require("../helpers/catchAsync");
-const ExpressErrors = require("../helpers/expressErrors");
+// const ExpressErrors = require("../helpers/expressErrors");
 
-const { reviewSchema } = require("../helpers/joiSchema");
+// 79. no need here, adding to userMiddleware instead.
+// const { reviewSchema } = require("../helpers/joiSchema");
 
-// 67. making similar middleware like above for reviews
-const validateReview = (req, res, next) => {
-   // 68. check for an error
-   const { error } = reviewSchema.validate(req.body);
-   if (error) {
-      const msg = error.details.map((el) => el.message).join(",");
-      throw new ExpressErrors(msg, 400);
-   } else {
-      next();
-   }
-};
+// 78. adding userMiddleware logics here
+const { isLoggedIn, isAuthor, validateReview ,validateCampground } = require("../helpers/userMiddleware");
+
+
+// 77. moving this logic to userMiddleware.js
+// // 67. making similar middleware like above for reviews
+// const validateReview = (req, res, next) => {
+//    // 68. check for an error
+//    const { error } = reviewSchema.validate(req.body);
+//    if (error) {
+//       const msg = error.details.map((el) => el.message).join(",");
+//       throw new ExpressErrors(msg, 400);
+//    } else {
+//       next();
+//    }
+// };
 
 // 60. adding post route to get campground review
 // 69. adding validateReview
