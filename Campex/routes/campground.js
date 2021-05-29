@@ -10,12 +10,21 @@ const Campground = require("../models/Campground");
 const { isLoggedIn, isCampgroundAuthor, validateCampground } = require("../helpers/userMiddleware");
 // 102. including controllers of our routes
 const campgroundController = require("../controllers/campground");
-
+// 105. including multer to parse multipart form data (usually used to upload files)
+const multer = require("multer");
+const multerUpload = multer({ dest: "uploads/" });
 // 104. chaining all routes using router.route in here and commenting whole code
 router
    .route("/")
    .get(catchAsync(campgroundController.indexPage))
-   .post(validateCampground, isLoggedIn, catchAsync(campgroundController.createCampground));
+   // .post(validateCampground, isLoggedIn, catchAsync(campgroundController.createCampground));
+   // 106. trying using multer to upload an image
+   // 107. we can also use "multerUpload.array("image")" to upload multiple files
+   .post(multerUpload.single("image"), (req, res) => {
+      // 108. have to use "req.files" to access multiple uploaded files
+      console.log(req.body, req.file);
+      res.send("it worked");
+   });
 
 router.get("/new", isLoggedIn, catchAsync(campgroundController.newPage));
 

@@ -56,7 +56,7 @@ db.once("open", () => {
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-// 10. to parse req.body in app.post, we need to fake it
+// 10. to parse req.body in app.post, we need to fake it (we are excepting url encoded form data to look like)
 app.use(express.urlencoded({ extended: true }));
 // 13. using method-override
 app.use(methodOverride("_method"));
