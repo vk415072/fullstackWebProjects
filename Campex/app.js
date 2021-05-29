@@ -1,3 +1,10 @@
+// 106. using dotenv node package to include our .env file to access environment variables if the code is not in production
+if (process.env.NODE_ENV != "Production") {
+   require("dotenv").config();
+}
+// 107. logging the environment variables from my .env file
+// console.log(process.env.SECRET);
+
 // 1. basic boiler plate of express app
 const express = require("express");
 const path = require("path");
