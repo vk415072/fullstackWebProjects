@@ -5,7 +5,9 @@
    <div class="col-6">
       <!-- bootstrap card -->
       <div class="card mb-3">
-         <img src="<%= campground1.image %>" class="card-img-top" alt="..." />
+         <% for(let img of campground1.images){ %>
+         <img src="<%= img.url %>" class="card-img-top" alt="..." />
+         <% } %>
          <div class="card-body">
             <h5 class="card-title"><%= campground1.title %></h5>
             <p class="card-text"><%= campground1.description %></p>

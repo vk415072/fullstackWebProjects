@@ -22,14 +22,15 @@ const multerUpload = multer({ storage });
 router
    .route("/")
    .get(catchAsync(campgroundController.indexPage))
-   // .post(validateCampground, isLoggedIn, catchAsync(campgroundController.createCampground));
-   // 106. trying using multer to upload an image
-   // 107. we can also use "multerUpload.single("image")" to upload single files
-   .post(multerUpload.array("image"), (req, res) => {
-      // 108. have to use "req.files" to access multiple uploaded files
-      console.log(req.body, req.files);
-      res.send("it worked");
-   });
+   // 111 added multer to upload images, also updating the controller for this route
+   .post(isLoggedIn, multerUpload.array("image"), validateCampground, catchAsync(campgroundController.createCampground));
+   // // 106. trying using multer to upload an image
+   // // 107. we can also use "multerUpload.single("image")" to upload single files
+   // .post(multerUpload.array("image"), (req, res) => {
+   //    // 108. have to use "req.files" to access multiple uploaded files
+   //    console.log(req.body, req.files);
+   //    res.send("it worked");
+   // });
 
 router.get("/new", isLoggedIn, catchAsync(campgroundController.newPage));
 
