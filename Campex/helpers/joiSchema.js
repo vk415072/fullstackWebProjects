@@ -10,6 +10,7 @@ module.exports.joiCampgroundSchema = Joi.object({
       // image: Joi.string().required(),
       description: Joi.string().required(),
    }).required(),
+   deleteImages: Joi.array(),
 });
 
 // 3. exporting...

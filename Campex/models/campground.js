@@ -6,17 +6,25 @@ const Review = require("./review");
 
 // 1. creating mongoose db Schema
 // 3. adding reviews entry
+// 8. cloudinary image url for ref:
+// 9. https://res.cloudinary.com/campex/image/upload/v1622312490/CAMPEX_Campgrounds/nhwbedpkp8m13vwb6tdw.png
+// 10. separating image data to its own schema:
+const ImageSchema = new Schema({
+   url: String,
+   filename: String,
+});
+// 11. now creating a virtual imageSchema and adding "/w_100,h_100" (this is a cloudinary feature which will return a (100x100)px image) (to use as a thumbnail)
+// virtual do not store in our model or db, it just derived from the info we,re already storing
+ImageSchema.virtual("thumbnail").get(function () {
+   return this.url.replace("/upload", "/upload/w_100,h_100");
+});
+
 const campgroundSchema = new mongoose.Schema({
    title: String,
    price: Number,
    description: String,
    location: String,
-   images: [
-      {
-         url: String,
-         filename: String,
-      },
-   ],
+   images: [ImageSchema],
    author: {
       type: Schema.Types.ObjectId,
       ref: "User",
