@@ -12,7 +12,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
    cloudinary,
    params: {
-      folder: "CAMPEX Campgrounds",
+      folder: "CAMPEX_Campgrounds",
       allowedFormats: ["jpeg", "png", "jpg"],
    },
 });

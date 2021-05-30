@@ -17,7 +17,7 @@ module.exports.createCampground = async (req, res, next) => {
    newCampground.images = req.files.map((f) => ({ url: f.path, filename: f.filename }));
    newCampground.author = req.user._id;
    await newCampground.save();
-   console.log(newCampground);
+   // console.log(newCampground);
    req.flash("success", "Successfully added a new Campground");
    res.redirect(`/campgrounds/${newCampground._id}`);
 };
@@ -45,6 +45,10 @@ module.exports.updateCampground = async (req, res) => {
    const updatedCampground = await Campground.findByIdAndUpdate(id, {
       ...req.body.campground,
    });
+   // making imgs array and filling it with already uploaded images then pushing more, not replacing existing images.
+   const imgs = req.files.map((f) => ({ url: f.path, filename: f.filename }));
+   updatedCampground.images.push(...imgs);
+   await updatedCampground.save();
    req.flash("success", "Successfully updated campground");
    res.redirect(`/campgrounds/${updatedCampground._id}`);
 };
