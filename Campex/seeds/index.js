@@ -30,17 +30,22 @@ const seedDB = async () => {
    };
 
    // 6. random looping through cities.js
-   for (let i = 0; i < 50; i++) {
+   for (let i = 0; i < 20; i++) {
       const random1k = Math.floor(Math.random() * 100);
       const price = Math.floor(Math.random() * 4000) + 10;
       // console.log(cities);
       // console.log(`HERE HERE HERE ${sample(descriptors)}`);
       const camp = new campground({
-         // 10.hard coding author
+         // 10.hard coding author (user: vk415072, pass: 12345)
          author: "60ae0c140f1f5f40d44f44cb",
          location: `${cities[random1k].city}, ${cities[random1k].state}`,
          // 8. passing random from simple() function to get desc & places
          title: `${sample(descriptors)} ${sample(places)}`,
+         geometry: {
+            type: "Point",
+            // hardcoded coordinates
+            coordinates: [78.9629, 20.5937],
+         },
          images: [
             {
                url: "https://res.cloudinary.com/campex/image/upload/v1622312490/CAMPEX_Campgrounds/zu9wb7rurmusejndhpkh.jpg",
