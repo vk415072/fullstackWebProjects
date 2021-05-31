@@ -102,9 +102,11 @@
    </div>
 </div>
 
-
 <script>
+   // passing token to mapboxJS.js
    const mapboxToken = "<%-process.env.MAPBOX_TOKEN%>";
+   // passing campground1 also and stringify the campground1's objects into json strings
+   const campground = <%- JSON.stringify(campground1) %>;
 </script>
 <!-- including mapbox js from public folder -->
 <!-- but this i want access token here and pass it to below js file -->
