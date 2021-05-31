@@ -44,7 +44,7 @@ const seedDB = async () => {
          geometry: {
             type: "Point",
             // hardcoded coordinates
-            coordinates: [78.9629, 20.5937],
+            coordinates: [cities[random1k].lng, cities[random1k].lat],
          },
          images: [
             {
