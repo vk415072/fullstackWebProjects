@@ -23,6 +23,19 @@ const campgroundSchema = new mongoose.Schema({
    title: String,
    price: Number,
    description: String,
+   // this geometry model is based from mapbox returned data
+   // "type": "Point", "coordinates": [23.3232, 24.2444]
+   geometry: {
+      type: {
+         type: String,
+         enum: ["Point"],
+         required: true,
+      },
+      coordinates: {
+         type: [Number],
+         required: true,
+      },
+   },
    location: String,
    images: [ImageSchema],
    author: {

@@ -24,18 +24,18 @@ module.exports.createCampground = async (req, res, next) => {
          limit: 1,
       })
       .send();
-   // will give longitude first then latitude.
-   console.log(geoData.body.features[0].geometry.coordinates);
-   res.send("ok!!");
-
-   // const newCampground = new Campground(req.body.campground);
-   // // mapping and looping to get image's filename and file path/url i.e, stored in cloudinary
-   // newCampground.images = req.files.map((f) => ({ url: f.path, filename: f.filename }));
-   // newCampground.author = req.user._id;
-   // await newCampground.save();
-   // // console.log(newCampground);
-   // req.flash("success", "Successfully added a new Campground");
-   // res.redirect(`/campgrounds/${newCampground._id}`);
+   // geometry will give geo jason
+   // coordinates will give longitude first then latitude.
+   // console.log(geoData.body.features[0].geometry.coordinates);
+   const newCampground = new Campground(req.body.campground);
+   newCampground.geometry = geoData.body.features[0].geometry;
+   // mapping and looping to get image's filename and file path/url i.e, stored in cloudinary
+   newCampground.images = req.files.map((f) => ({ url: f.path, filename: f.filename }));
+   newCampground.author = req.user._id;
+   await newCampground.save();
+   // console.log(newCampground);
+   req.flash("success", "Successfully added a new Campground");
+   res.redirect(`/campgrounds/${newCampground._id}`);
 };
 
 module.exports.showCampground = async (req, res) => {
