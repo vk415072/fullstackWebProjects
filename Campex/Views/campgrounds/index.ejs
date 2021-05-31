@@ -34,6 +34,7 @@
 <script>
    // passing token to mapboxJS.js
    const mapboxToken = "<%-process.env.MAPBOX_TOKEN%>";
+   const campgrounds = {features: <%-JSON.stringify(campgrounds)%>};
 </script>
 <!-- including mbxCluster.js js -->
 <script src="/js/mbxCluster.js"></script>

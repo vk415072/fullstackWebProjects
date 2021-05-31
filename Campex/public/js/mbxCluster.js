@@ -4,8 +4,8 @@ mapboxgl.accessToken = mapboxToken;
 var map = new mapboxgl.Map({
    container: "map",
    style: "mapbox://styles/mapbox/dark-v10",
-   center: [-103.59179687498357, 40.66995747013945],
-   zoom: 3,
+   center: [79.26737318363301, 23.033925006426365],
+   zoom: 4,
 });
 
 map.on("load", function () {
@@ -16,7 +16,24 @@ map.on("load", function () {
       type: "geojson",
       // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
       // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
-      data: "https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson",
+      // data: "https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson",
+      // data formate from above link that mapbox cluster supports:
+      // {
+      //    "type": "Feature", 
+      //    "properties": { 
+      //       "id": "ak16994521", 
+      //       "mag": 2.3, 
+      //       "time": 1507425650893, 
+      //       "felt": null, 
+      //       "tsunami": 0 }, 
+      //    "geometry": { 
+      //       "type": "Point", 
+      //       "coordinates": [ -151.5129, 63.1016, 0.0 ]
+      //    }
+      // }
+      // updating data
+      data: campgrounds,
+
       cluster: true,
       clusterMaxZoom: 14, // Max zoom to cluster points on
       clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
