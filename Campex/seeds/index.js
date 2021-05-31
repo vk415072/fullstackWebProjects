@@ -39,7 +39,7 @@ const seedDB = async () => {
          // 10.hard coding author (user: vk415072, pass: 12345)
          author: "60ae0c140f1f5f40d44f44cb",
          location: `${cities[random1k].city}, ${cities[random1k].state}`,
-         // 8. passing random from simple() function to get desc & places
+         // 8. passing random from sample() function to get desc & places
          title: `${sample(descriptors)} ${sample(places)}`,
          geometry: {
             type: "Point",
