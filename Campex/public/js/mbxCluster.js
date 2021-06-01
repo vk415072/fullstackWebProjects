@@ -12,11 +12,11 @@ map.on("load", function () {
    // Add a new source from our GeoJSON data and
    // set the 'cluster' option to true. GL-JS will
    // add the point_count property to your source data.
-   map.addSource("earthquakes", {
+   map.addSource("campgrounds", {
       type: "geojson",
-      // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
+      // Point to GeoJSON data. This example visualizes all M1.0+ campgrounds
       // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
-      // data: "https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson",
+      // data: "https://docs.mapbox.com/mapbox-gl-js/assets/campgrounds.geojson",
       // data formate from above link that mapbox cluster supports:
       // {
       //    "type": "Feature", 
@@ -42,7 +42,7 @@ map.on("load", function () {
    map.addLayer({
       id: "clusters",
       type: "circle",
-      source: "earthquakes",
+      source: "campgrounds",
       filter: ["has", "point_count"],
       paint: {
          // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
@@ -50,15 +50,15 @@ map.on("load", function () {
          //   * Blue, 20px circles when point count is less than 100
          //   * Yellow, 30px circles when point count is between 100 and 750
          //   * Pink, 40px circles when point count is greater than or equal to 750
-         "circle-color": ["step", ["get", "point_count"], "#51bbd6", 100, "#f1f075", 750, "#f28cb1"],
-         "circle-radius": ["step", ["get", "point_count"], 20, 100, 30, 750, 40],
+         "circle-color": ["step", ["get", "point_count"], "#ffcdb2", 10, "#ffb4a2", 30, "#e5989b"],
+         "circle-radius": ["step", ["get", "point_count"], 15, 10, 20, 30, 25],
       },
    });
 
    map.addLayer({
       id: "cluster-count",
       type: "symbol",
-      source: "earthquakes",
+      source: "campgrounds",
       filter: ["has", "point_count"],
       layout: {
          "text-field": "{point_count_abbreviated}",
@@ -70,13 +70,13 @@ map.on("load", function () {
    map.addLayer({
       id: "unclustered-point",
       type: "circle",
-      source: "earthquakes",
+      source: "campgrounds",
       filter: ["!", ["has", "point_count"]],
       paint: {
-         "circle-color": "#11b4da",
-         "circle-radius": 4,
+         "circle-color": "#ef476f",
+         "circle-radius": 10,
          "circle-stroke-width": 1,
-         "circle-stroke-color": "#fff",
+         "circle-stroke-color": "#000000",
       },
    });
 
@@ -86,7 +86,7 @@ map.on("load", function () {
          layers: ["clusters"],
       });
       var clusterId = features[0].properties.cluster_id;
-      map.getSource("earthquakes").getClusterExpansionZoom(clusterId, function (err, zoom) {
+      map.getSource("campgrounds").getClusterExpansionZoom(clusterId, function (err, zoom) {
          if (err) return;
 
          map.easeTo({
