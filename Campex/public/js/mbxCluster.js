@@ -8,6 +8,9 @@ var map = new mapboxgl.Map({
    zoom: 4,
 });
 
+// Add zoom and rotation controls to the map.
+map.addControl(new mapboxgl.NavigationControl());
+
 map.on("load", function () {
    // Add a new source from our GeoJSON data and
    // set the 'cluster' option to true. GL-JS will
@@ -102,7 +105,7 @@ map.on("load", function () {
    // description HTML from its properties.
    map.on("click", "unclustered-point", function (e) {
       // console.log(e.features[0]);
-      const {popUpMarkup} = e.features[0].properties;
+      const { popUpMarkup } = e.features[0].properties;
       // console.log(text);
       var coordinates = e.features[0].geometry.coordinates.slice();
 
