@@ -1,15 +1,17 @@
 <% layout('layouts/boilerplate') %>
 <link rel="stylesheet" href="/stylesheets/starability.css" />
+<link rel="stylesheet" href="/stylesheets/showPage.css" />
 
 <div class="row">
-   <div class="col-6">
+   <!-- image and card div -->
+   <div class="col-md-6">
       <!-- bootstrap carousel -->
       <div id="campgroundCarousel" class="carousel slide" data-bs-ride="carousel">
          <div class="carousel-inner">
             <!-- setting index for each image while looping as we've to set one/first image as 'active' -->
             <% campground1.images.forEach((img, i) => { %>
             <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
-               <img src="<%= img.url %>" class="d-block w-100" />
+               <img id="show-pg-img" src="<%= img.url %>" class="d-block w-100" />
             </div>
             <% }) %>
          </div>
@@ -26,7 +28,7 @@
          <% } %>
       </div>
 
-      <!-- bootstrap card -->
+      <!-- card div -->
       <div class="card mb-3">
          <div class="card-body">
             <h5 class="card-title"><%= campground1.title %></h5>
@@ -49,20 +51,22 @@
       </div>
    </div>
 
-   <div class="col-6">
+   <!-- map div -->
+   <div class="col-md-6">
       <div class="mb-3">
          <!-- mapbox code -->
          <div id="map"></div>
       </div>
-      <!-- add review -->
+
+      <!-- review -->
       <% if(currentUser) {%>
-      <h2>Leave a review:</h2>
+      <h4>Leave a review:</h4>
       <form class="mb-3 validated-form" action="/campgrounds/<%= campground1._id %>/reviews" method="POST" novalidate>
          <!-- <div class="mb-3">
             <label class="form-label" for="rating">Rating</label>
             <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating" />
          </div> -->
-         <div class="mb-3">
+         <div class="">
             <!-- code from starability -->
             <fieldset class="starability-checkmark">
                <!-- <legend>First rating:</legend> -->
@@ -86,14 +90,17 @@
          </div>
          <button class="btn btn-success">Add Review</button>
       </form>
+      <% }else{ %>
+      <h5 class="mb-3 text-muted">(<a href="/login" id="login-text">Login</a> to leave a review.)</h5>
       <% } %>
       <!-- show review -->
+      <h4>Reviews:</h4>
       <% for(let review of campground1.reviews) { %>
       <div class="card mb-3">
          <div class="card-body">
             <h5 class="card-title"><%= review.author.username %></h5>
             <p class="starability-result" data-rating="<%= review.rating %>">Rated: <%= review.rating %> stars</p>
-            <p class="card-text">Review: <%= review.body %></p>
+            <p class="card-text"><%= review.body %></p>
             <% if(currentUser && review.author.equals(currentUser)){ %>
             <form action="/campgrounds/<%= campground1._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
                <button class="btn btn-danger">Delete</button>
