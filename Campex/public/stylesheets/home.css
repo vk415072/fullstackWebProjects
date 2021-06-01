@@ -1,8 +1,37 @@
 body {
    height: 100vh;
+   background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+      url("https://images.unsplash.com/photo-1533873984035-25970ab07461?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1053&q=80");
+   background-size: cover;
+   background-position: center;
+   text-shadow: 0 0.05.rem 0.1rem rgba(0, 0, 0, 0.5);
+   box-shadow: 0 0 5rem rgba(0, 0, 0, 0.5);
 }
 
 .covercontainer {
    /* vw = view width */
    max-width: 60vw;
+}
+
+.nav-link {
+   padding: 0.25rem 0;
+   font-weight: 700;
+   color: rgba(255, 255, 255, 0.5);
+   margin-left: 1 rem;
+   border-bottom: 00.25rem solid transparent;
+}
+.nav-link:hover {
+   color: rgba(255, 255, 255, 0.5);
+   border-bottom-color: rgba(255, 255, 255, 0.5);
+}
+
+.nav-link.active {
+   columns: white;
+   border-bottom-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-secondary,
+.btn-secondary:hover {
+   color: #333;
+   text-shadow: none;
 }
