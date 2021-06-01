@@ -1,3 +1,13 @@
-body {
-   background-color: tomato;
+#index-camp-card {
+   background-color: #a8dadc;
+   height: 250px;
+}
+
+#index-pg-img {
+   height: 248px;
+   object-fit: cover;
+}
+
+#cluster-map {
+   border: 10px solid;
 }

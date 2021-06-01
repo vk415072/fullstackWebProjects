@@ -1,27 +1,28 @@
 <% layout('layouts/boilerplate') %>
 <link rel="stylesheet" href="stylesheets/indexPage.css" />
 
-<div id="cluster-map"></div>
+<div class="mb-3" id="cluster-map"></div>
 
-<h1>All Campgrounds</h1>
+<h1 class="mb-3">All Campgrounds</h1>
 <% for(let campground of campgrounds){ %>
-<div class="card mb-3">
+<div class="card mb-3" id="index-camp-card">
    <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-4" id="index-img-div">
          <% if(campground.images.length){ %>
-         <img src="<%= campground.images[0].url %>" class="img-fluid" alt="" />
+         <img src="<%= campground.images[0].url %>" class="img-fluid w-100" id="index-pg-img" alt="" />
          <% }else{ %>
          <img
             src="https://res.cloudinary.com/campex/image/upload/v1622444222/CAMPEX_Campgrounds/Default_Campground_Image/no_image.png"
-            class="img-fluid"
+            class="img-fluid w-100"
+            id="index-pg-img"
             alt=""
          />
          <% } %>
       </div>
-      <div class="col-md-8">
+      <div class="col-md-8" id="camps-div">
          <div class="card-body">
             <h5 class="card-title"><%= campground.title %></h5>
-            <p class="card-text"><%= campground.description %></p>
+            <p class="card-text"><%= campground.description.substring(0, 200) %> ...</p>
             <p class="card-text">
                <small class="text-muted"> <%= campground.location %> </small>
             </p>
