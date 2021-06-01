@@ -144,11 +144,6 @@ passport.deserializeUser(User.deserializeUser());
 //    }
 // };
 
-// 2. listening to homepage req and rendering it.
-app.get("/", (req, res) => {
-   res.render("home");
-});
-
 // 91. adding flash middleware (all these locals can be access in all routes)
 app.use((req, res, next) => {
    // 92. on every single req, whatever in the 'success' will have access to it under the locals (tamplets) with a key 'success'
@@ -158,6 +153,11 @@ app.use((req, res, next) => {
    // 105. defining currentUser's local
    res.locals.currentUser = req.user;
    next();
+});
+
+// 2. listening to homepage req and rendering it.
+app.get("/", (req, res) => {
+   res.render("home");
 });
 
 // 76. moved all /campground routes to routes/campground.js

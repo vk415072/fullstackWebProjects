@@ -19,15 +19,15 @@ map.on("load", function () {
       // data: "https://docs.mapbox.com/mapbox-gl-js/assets/campgrounds.geojson",
       // data formate from above link that mapbox cluster supports:
       // {
-      //    "type": "Feature", 
-      //    "properties": { 
-      //       "id": "ak16994521", 
-      //       "mag": 2.3, 
-      //       "time": 1507425650893, 
-      //       "felt": null, 
-      //       "tsunami": 0 }, 
-      //    "geometry": { 
-      //       "type": "Point", 
+      //    "type": "Feature",
+      //    "properties": {
+      //       "id": "ak16994521",
+      //       "mag": 2.3,
+      //       "time": 1507425650893,
+      //       "felt": null,
+      //       "tsunami": 0 },
+      //    "geometry": {
+      //       "type": "Point",
       //       "coordinates": [ -151.5129, 63.1016, 0.0 ]
       //    }
       // }
@@ -35,7 +35,7 @@ map.on("load", function () {
       data: campgrounds,
 
       cluster: true,
-      clusterMaxZoom: 14, // Max zoom to cluster points on
+      clusterMaxZoom: 8, // Max zoom to cluster points on
       clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
    });
 
@@ -51,7 +51,7 @@ map.on("load", function () {
          //   * Yellow, 30px circles when point count is between 100 and 750
          //   * Pink, 40px circles when point count is greater than or equal to 750
          "circle-color": ["step", ["get", "point_count"], "#ffcdb2", 10, "#ffb4a2", 30, "#e5989b"],
-         "circle-radius": ["step", ["get", "point_count"], 15, 10, 20, 30, 25],
+         "circle-radius": ["step", ["get", "point_count"], 20, 10, 25, 30, 30],
       },
    });
 
@@ -74,7 +74,7 @@ map.on("load", function () {
       filter: ["!", ["has", "point_count"]],
       paint: {
          "circle-color": "#ef476f",
-         "circle-radius": 10,
+         "circle-radius": 20,
          "circle-stroke-width": 1,
          "circle-stroke-color": "#000000",
       },
@@ -101,15 +101,10 @@ map.on("load", function () {
    // the location of the feature, with
    // description HTML from its properties.
    map.on("click", "unclustered-point", function (e) {
+      // console.log(e.features[0]);
+      const {popUpMarkup} = e.features[0].properties;
+      // console.log(text);
       var coordinates = e.features[0].geometry.coordinates.slice();
-      var mag = e.features[0].properties.mag;
-      var tsunami;
-
-      if (e.features[0].properties.tsunami === 1) {
-         tsunami = "yes";
-      } else {
-         tsunami = "no";
-      }
 
       // Ensure that if the map is zoomed out such that
       // multiple copies of the feature are visible, the
@@ -118,10 +113,7 @@ map.on("load", function () {
          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
       }
 
-      new mapboxgl.Popup()
-         .setLngLat(coordinates)
-         .setHTML("magnitude: " + mag + "<br>Was there a tsunami?: " + tsunami)
-         .addTo(map);
+      new mapboxgl.Popup().setLngLat(coordinates).setHTML(popUpMarkup).addTo(map);
    });
 
    map.on("mouseenter", "clusters", function () {
