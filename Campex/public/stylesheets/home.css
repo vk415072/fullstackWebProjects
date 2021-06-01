@@ -1,0 +1,8 @@
+body {
+   height: 100vh;
+}
+
+.covercontainer {
+   /* vw = view width */
+   max-width: 60vw;
+}
