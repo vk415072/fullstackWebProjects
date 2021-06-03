@@ -50,14 +50,14 @@ const mongoSanitize = require("express-mongo-sanitize");
 // 110. helmet enables all middlewares that it comes with
 const helmet = require("helmet");
 // 114. getting mongodb atlas
-const dbUrl = process.env.MONGODB_URL;
+const dbUrl = process.env.MONGODB_URL || "mongodb://localhost:27017/campex";
 // 116. including connect-mongo
 const ConnectMongo = require("connect-mongo");
 
 // 3. mongoose defaults
 // 115. adding db source from localhost to mongo server
-mongoose.connect("mongodb://localhost:27017/campex", {
-   // mongoose.connect(dbUrl, {
+// mongoose.connect("mongodb://localhost:27017/campex", {
+mongoose.connect(dbUrl, {
    useNewUrlParser: true,
    useCreateIndex: true,
    useUnifiedTopology: true,
@@ -84,10 +84,11 @@ app.engine("ejs", ejsMate);
 app.use(express.static("public"));
 
 // 116 using connect-mongo package
+const secret = process.env.SECRET || "thisismysecret!";
 const store = ConnectMongo.create({
-   // url: dbUrl,
-   mongoUrl: "mongodb://localhost:27017/campex",
-   secret: "Thisismysecret!",
+   mongoUrl: dbUrl,
+   // mongoUrl: "mongodb://localhost:27017/campex",
+   secret: secret,
    touchAfter: 24 * 60 * 60,
 });
 store.on("error", function (e) {
