@@ -45,8 +45,10 @@ const passport = require("passport");
 const passportLocal = require("passport-local");
 // 96. requiring our user model
 const User = require("./models/user");
-// 108 adding mongo sanitize to delete some query signs and symbol from user's input
+// 108. adding mongo sanitize to delete some query signs and symbol from user's input
 const mongoSanitize = require("express-mongo-sanitize");
+// 110. helmet enables all middlewares that it comes with
+const helmet = require("helmet");
 
 // 3. mongoose defaults
 mongoose.connect("mongodb://localhost:27017/campex", {
@@ -92,6 +94,9 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 // 90. using flash
 app.use(flash());
+// 111. enabling helmet
+// 112. disabling content security policy as it will create problem using third party services.
+app.use(helmet({ contentSecurityPolicy: false }));
 // 95. using passport
 app.use(passport.initialize());
 app.use(passport.session());

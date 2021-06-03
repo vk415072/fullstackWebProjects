@@ -5,7 +5,10 @@
       <!-- alert code from bootstrap -->
       <div class="alert alert-danger" role="alert">
          <h4 class="alert-heading"><%= err.message %></h4>
+         <!-- only showing error details if code in production -->
+         <% if (process.env.NODE_ENV != "Production"){ %>
          <p><%= err.stack %></p>
+         <% } %>
       </div>
    </div>
 </div>

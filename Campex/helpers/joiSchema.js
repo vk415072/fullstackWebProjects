@@ -1,7 +1,7 @@
 // 1. requiring Joi
 const BaseJoi = require("joi");
 // 6. requiring sanitize-html
-const sanitizeHTML = require("sanitize-html");
+const sanitizeHtml = require("sanitize-html");
 
 // 5. creating a rule with joi to stop any html input form user side
 // (from joi docs)
