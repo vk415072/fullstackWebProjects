@@ -74,8 +74,10 @@ app.engine("ejs", ejsMate);
 // 82. telling express to serve over custom static /public directory.
 // 83. so that i can use the files of this directory directly.
 app.use(express.static("public"));
+
 // 86. creating session configs
 const sessionConfig = {
+   name: "blah",
    secret: "thisisasecret!",
    resave: false,
    saveUninitialized: true,
