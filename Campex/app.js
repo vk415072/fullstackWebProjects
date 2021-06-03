@@ -49,9 +49,13 @@ const User = require("./models/user");
 const mongoSanitize = require("express-mongo-sanitize");
 // 110. helmet enables all middlewares that it comes with
 const helmet = require("helmet");
+// 114. getting mongodb atlas
+const dbUrl = process.env.MONGODB_URL;
 
 // 3. mongoose defaults
+// 115. adding db source from localhost to mongo server
 mongoose.connect("mongodb://localhost:27017/campex", {
+// mongoose.connect(dbUrl, {
    useNewUrlParser: true,
    useCreateIndex: true,
    useUnifiedTopology: true,
@@ -96,6 +100,7 @@ app.use(session(sessionConfig));
 app.use(flash());
 // 111. enabling helmet
 // 112. disabling content security policy as it will create problem using third party services.
+// 113. pending content security policy setup...
 app.use(helmet({ contentSecurityPolicy: false }));
 // 95. using passport
 app.use(passport.initialize());
