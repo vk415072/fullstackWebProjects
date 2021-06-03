@@ -45,6 +45,8 @@ const passport = require("passport");
 const passportLocal = require("passport-local");
 // 96. requiring our user model
 const User = require("./models/user");
+// 108 adding mongo sanitize to delete some query signs and symbol from user's input
+const mongoSanitize = require("express-mongo-sanitize");
 
 // 3. mongoose defaults
 mongoose.connect("mongodb://localhost:27017/campex", {
@@ -91,6 +93,9 @@ app.use(flash());
 // 95. using passport
 app.use(passport.initialize());
 app.use(passport.session());
+// 109. using mongoSanitize
+app.use(mongoSanitize());
+
 // 97. telling passport to use local strategy (passport-local) and for that local strategy, the authentication method is located on our User model and its called authenticate()
 passport.use(new passportLocal(User.authenticate()));
 // 98. telling passport to serialize (how to store User in the session) the user
