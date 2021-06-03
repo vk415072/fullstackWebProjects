@@ -51,11 +51,13 @@ const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
 // 114. getting mongodb atlas
 const dbUrl = process.env.MONGODB_URL;
+// 116. including connect-mongo
+const ConnectMongo = require("connect-mongo");
 
 // 3. mongoose defaults
 // 115. adding db source from localhost to mongo server
 mongoose.connect("mongodb://localhost:27017/campex", {
-// mongoose.connect(dbUrl, {
+   // mongoose.connect(dbUrl, {
    useNewUrlParser: true,
    useCreateIndex: true,
    useUnifiedTopology: true,
@@ -81,8 +83,22 @@ app.engine("ejs", ejsMate);
 // 83. so that i can use the files of this directory directly.
 app.use(express.static("public"));
 
+// 116 using connect-mongo package
+const store = ConnectMongo.create({
+   // url: dbUrl,
+   mongoUrl: "mongodb://localhost:27017/campex",
+   secret: "Thisismysecret!",
+   touchAfter: 24 * 60 * 60,
+});
+store.on("error", function (e) {
+   console.log("SESSION STORE ERROR", e);
+});
+
 // 86. creating session configs
+// 117 passing store. This will use mongo to store our session info
 const sessionConfig = {
+   store,
+   // sore: store,
    name: "blah",
    secret: "thisisasecret!",
    resave: false,
