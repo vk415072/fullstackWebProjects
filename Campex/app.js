@@ -50,7 +50,8 @@ const mongoSanitize = require("express-mongo-sanitize");
 // 110. helmet enables all middlewares that it comes with
 const helmet = require("helmet");
 // 114. getting mongodb atlas
-const dbUrl = process.env.MONGODB_URL || "mongodb://localhost:27017/campex";
+// const dbUrl = process.env.MONGODB_URL || "mongodb://localhost:27017/campex";
+const dbUrl = "mongodb://localhost:27017/campex";
 // 116. including connect-mongo
 const ConnectMongo = require("connect-mongo");
 

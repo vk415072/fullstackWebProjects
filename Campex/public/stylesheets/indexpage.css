@@ -1,5 +1,5 @@
 #index-camp-card {
-   background-color: #a8dadc;
+   background-color: #343332;
    height: 250px;
 }
 
@@ -10,4 +10,5 @@
 
 #cluster-map {
    border: 10px solid;
+   color: #343332;
 }

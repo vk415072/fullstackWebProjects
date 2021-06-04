@@ -72,7 +72,7 @@ campgroundSchema.post("findOneAndDelete", async function (doc) {
 // 13. we can access "properties.popUpMarkup" in any html, we will be able to print but, by default mongo does not include virtuals when we convert a document into JSON
 // 14. including some line from mongodb to make this happen (go to 15.)
 campgroundSchema.virtual("properties.popUpMarkup").get(function () {
-   return `<strong><h2><a href="/campgrounds/${this._id}">${this.title}</a></strong></h2><p>${this.location}</p>`;
+   return `<strong><h4><a href="/campgrounds/${this._id}">${this.title}</a></strong></h4><p>${this.location}</p>`;
 });
 
 // 2. exporting Schema
