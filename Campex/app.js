@@ -11,7 +11,7 @@ const path = require("path");
 const app = express();
 const mongoose = require("mongoose");
 // 5. requiring our model
-const Campground = require("./models/Campground");
+// const Campground = require("./models/campground");
 // 12. requiring method-override
 const methodOverride = require("method-override");
 // 17. requiring ejs-mate
