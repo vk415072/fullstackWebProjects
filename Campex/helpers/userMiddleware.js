@@ -1,6 +1,6 @@
 const { joiCampgroundSchema, reviewSchema } = require("./joiSchema");
 const ExpressErrors = require("./expressErrors");
-const Campground = require("../models/Campground");
+const Campground = require("../models/campground");
 const Review = require("../models/review");
 
 module.exports.isLoggedIn = (req, res, next) => {

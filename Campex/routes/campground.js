@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 // 78. adding some data from app.js
 const catchAsync = require("../helpers/catchAsync");
-const Campground = require("../models/Campground");
+// const Campground = require("../models/Campground");
 // 98. no more need for this schema in here now but require in userMiddleware.js
 // const { joiCampgroundSchema, reviewSchema } = require("../helpers/joiSchema");
 // 87. importing user middleware which check if logged in
