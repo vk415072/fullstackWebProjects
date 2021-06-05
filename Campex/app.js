@@ -50,8 +50,8 @@ const mongoSanitize = require("express-mongo-sanitize");
 // 110. helmet enables all middlewares that it comes with
 const helmet = require("helmet");
 // 114. getting mongodb atlas
-// const dbUrl = process.env.MONGODB_URL || "mongodb://localhost:27017/campex";
-const dbUrl = "mongodb://localhost:27017/campex";
+const dbUrl = process.env.MONGODB_URL || "mongodb://localhost:27017/campex";
+// const dbUrl = "mongodb://localhost:27017/campex";
 // 116. including connect-mongo
 const ConnectMongo = require("connect-mongo");
 
@@ -89,7 +89,7 @@ const secret = process.env.SECRET || "thisismysecret!";
 const store = ConnectMongo.create({
    mongoUrl: dbUrl,
    // mongoUrl: "mongodb://localhost:27017/campex",
-   secret: secret,
+   secret,
    touchAfter: 24 * 60 * 60,
 });
 store.on("error", function (e) {
@@ -102,7 +102,7 @@ const sessionConfig = {
    store,
    // sore: store,
    name: "blah",
-   secret: "thisisasecret!",
+   secret,
    resave: false,
    saveUninitialized: true,
    cookie: {
@@ -225,7 +225,9 @@ app.use((err, req, res, next) => {
    res.status(statusCode).render("error.ejs", { err });
 });
 
+// getting port no. from Heroku
+const PORT = process.env.PORT || 5000;
 // 1. basic boiler plate of express app
-app.listen(3000, () => {
+app.listen(PORT, () => {
    console.log("SERVING ON PORT 3000");
 });
